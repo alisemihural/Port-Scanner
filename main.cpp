@@ -3,8 +3,13 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-int main() {
-    const std::string targetIP = "127.0.0.1";
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <IP address>\n";
+        return 1;
+    }
+
+    std::string ip = argv[1];
     const int startPort = 1;
     const int endPort = 65535;
 
@@ -19,7 +24,7 @@ int main() {
         server.sin_family = AF_INET;
         server.sin_port = htons(port);
 
-        if (inet_pton(AF_INET, targetIP.c_str(), &server.sin_addr) <= 0) {
+        if (inet_pton(AF_INET, ip.c_str(), &server.sin_addr) <= 0) {
             std::cerr << "Invalid target IP address" << std::endl;
             close(sock);
             return 1;
@@ -35,3 +40,4 @@ int main() {
 
     return 0;
 }
+
